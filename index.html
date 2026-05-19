@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!-- ========================= -->
+<!-- HTML -->
+<!-- ========================= -->
+
+<div class="wrapper">
+
+  <div class="receipt" id="receipt">
+
+    <div class="header">
+
+      <h1>Sleepy Receipt</h1>
+
+      <p>
+        SESSION #
+        <span id="sessionNumber">
+          001
+        </span>
+      </p>
+
+      <p id="dateText">
+        2026/05/19 27:14
+      </p>
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="status">
+
+      <p id="batteryText">
+        BATTERY ▓▓▓▓░ 82%
+      </p>
+
+      <p id="brainText">
+        BRAIN CACHE ▓▓▓░░ 64%
+      </p>
+
+      <p id="weatherText">
+        WEATHER ☁ 22°C
+      </p>
+
+      <p id="sheepSignalText">
+        SHEEP SIGNAL dreamy
+      </p>
+
+    </div>
+
+    <div class="line"></div>
+
+    <p class="sectionTitle">
+      tiny done
+    </p>
+
+    <div id="taskList"></div>
+
+    <div class="line"></div>
+
+    <p class="sectionTitle">
+      tiny spend
+    </p>
+
+    <div id="spendList"></div>
+
+    <div class="line"></div>
+
+    <div class="summary">
+
+      <div class="summaryRow">
+        <span>FIRST CHECK-IN</span>
+        <span id="firstCheckin">--:--</span>
+      </div>
+
+      <div class="summaryRow">
+        <span>LAST CHECK-IN</span>
+        <span id="lastCheckin">--:--</span>
+      </div>
+
+      <div class="summaryRow">
+        <span>TOTAL AMOUNT</span>
+        <span id="totalAmount">¥0</span>
+      </div>
+
+    </div>
+
+    <div class="solidLine"></div>
+
+    <div class="activeTime">
+
+      <span>
+        TOTAL ACTIVE TIME
+      </span>
+
+      <strong id="activeTimeText">
+        0H 00M
+      </strong>
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="receiptBottom">
+
+      <p>
+        sleepy days archive
+      </p>
+
+      <p class="loadingText">
+        DREAMS NOW LOADING...
+      </p>
+
+      <div class="signature">
+
+        <div id="sleepMessage"></div>
+
+        <div id="sleepTranslation"></div>
+
+      </div>
+
+    </div>
+
+    <div class="paper-tear"></div>
+
+  </div>
+
+  <div class="bottomArea">
+
+    <div class="buttonRow">
+
+      <button id="menuBtn">
+        MENU
+      </button>
+
+      <button id="saveImageBtn">
+        SAVE
+      </button>
+
+      <button id="newBtn">
+        NEW
+      </button>
+
+    </div>
+
+    <div class="menu hidden" id="menuPanel">
+
+      <button
+        class="miniBtn"
+        id="doneToggle"
+      >
+        done
+      </button>
+
+      <button
+        class="miniBtn"
+        id="spendToggle"
+      >
+        spend
+      </button>
+
+      <button
+        class="miniBtn"
+        id="statusToggle"
+      >
+        status
+      </button>
+
+    </div>
+
+    <div
+      class="panel hidden"
+      id="donePanel"
+    >
+
+      <input
+        id="doneInput"
+        placeholder="what did you do?"
+      />
+
+      <div class="timeRow">
+
+        <input
+          id="doneTime"
+          placeholder="25:14"
+        />
+
+        <button id="nowBtn">
+          now
+        </button>
+
+      </div>
+
+      <button id="saveDone">
+        save done
+      </button>
+
+    </div>
+
+    <div
+      class="panel hidden"
+      id="spendPanel"
+    >
+
+      <input
+        id="spendInput"
+        placeholder="what did you buy?"
+      />
+
+      <input
+        id="spendPrice"
+        placeholder="1200"
+      />
+
+      <button id="saveSpend">
+        save spend
+      </button>
+
+    </div>
+
+    <div
+      class="panel hidden"
+      id="statusPanel"
+    >
+
+      <label>
+        BATTERY
+      </label>
+
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="82"
+        id="batteryRange"
+      />
+
+      <label>
+        BRAIN CACHE
+      </label>
+
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="64"
+        id="brainRange"
+      />
+
+    </div>
+
+    <div id="imageArea"></div>
+
+  </div>
+
+</div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'></script><script  src="./script.js"></script>
+
+  </body>
+  
+</html>
