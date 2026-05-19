@@ -507,17 +507,38 @@ document
 };
 
 
+```javascript
+let newConfirm = false;
+
 document
 .getElementById(
 "newBtn"
 ).onclick = ()=>{
 
-const confirmReset =
-confirm(
-"Start a new sleepy session?"
+const btn =
+document.getElementById(
+"newBtn"
 );
 
-if(!confirmReset)return;
+if(!newConfirm){
+
+newConfirm = true;
+
+btn.innerText =
+"CONFIRM?";
+
+setTimeout(()=>{
+
+newConfirm = false;
+
+btn.innerText =
+"NEW";
+
+},3000);
+
+return;
+
+}
 
 const session =
 Number(
@@ -544,7 +565,14 @@ document
 String(session + 1)
 .padStart(3,"0");
 
+newConfirm = false;
+
+btn.innerText =
+"NEW";
+
 };
+```
+
 
 
 document
