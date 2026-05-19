@@ -507,7 +507,6 @@ document
 };
 
 
-```javascript
 let newConfirm = false;
 
 document
@@ -571,7 +570,6 @@ btn.innerText =
 "NEW";
 
 };
-```
 
 
 
