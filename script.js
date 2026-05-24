@@ -1,41 +1,20 @@
 /* ========================= */
-/* JS */
+/* Sleepy Receipt JS */
 /* ========================= */
 
 const tasks = [];
-
-const currentSession =
-Number(
-localStorage.getItem(
-"sleepySession"
-) || "1"
-);
-
-document
-.getElementById(
-"sessionNumber"
-).innerText =
-String(currentSession)
-.padStart(3,"0");
-
-
 const spends = [];
 
 const sheepSignals = [
-
   "dreamy",
-  "sleepy",
-  "unstable",
-  "wandering",
-  "offline",
-  "buffering",
-  "cozy",
-  "drowsy",
   "moonlit",
+  "buffering",
   "zzz...",
-  "lost in clouds",
-  "counting..."
-
+  "counting...",
+  "offline",
+  "sleepy",
+  "cozy",
+  "drowsy"
 ];
 
 const messages = [
@@ -82,6 +61,28 @@ jp:"脳内タブが開きすぎています"
 
 ];
 
+/* ========================= */
+/* SESSION */
+/* ========================= */
+
+const currentSession =
+Number(
+localStorage.getItem(
+"sleepySession"
+) || "1"
+);
+
+document
+.getElementById(
+"sessionNumber"
+).innerText =
+String(currentSession)
+.padStart(3,"0");
+
+/* ========================= */
+/* RANDOM MESSAGE */
+/* ========================= */
+
 const selectedMessage =
 messages[
 Math.floor(
@@ -102,6 +103,10 @@ document
 ).innerText =
 selectedMessage.jp;
 
+/* ========================= */
+/* SHEEP SIGNAL */
+/* ========================= */
+
 document
 .getElementById(
 "sheepSignalText"
@@ -115,29 +120,95 @@ Math.random()
 ]
 }`;
 
+/* ========================= */
+/* DATE */
+/* ========================= */
+
+function updateDate(){
+
+const now =
+new Date();
+
+const year =
+now.getFullYear();
+
+const month =
+String(
+now.getMonth()+1
+).padStart(2,"0");
+
+const day =
+String(
+now.getDate()
+).padStart(2,"0");
+
+let hour =
+now.getHours();
+
+const minute =
+String(
+now.getMinutes()
+).padStart(2,"0");
+
+if(hour < 6){
+
+hour += 24;
+
+}
+
+document
+.getElementById(
+"dateText"
+).innerText =
+`${year}/${month}/${day} ${hour}:${minute}`;
+
+}
+
+updateDate();
+
+/* ========================= */
+/* MENU */
+/* ========================= */
+
 const menuBtn =
-document.getElementById("menuBtn");
+document.getElementById(
+"menuBtn"
+);
 
 const menuPanel =
-document.getElementById("menuPanel");
+document.getElementById(
+"menuPanel"
+);
 
 const doneToggle =
-document.getElementById("doneToggle");
+document.getElementById(
+"doneToggle"
+);
 
 const spendToggle =
-document.getElementById("spendToggle");
+document.getElementById(
+"spendToggle"
+);
 
 const statusToggle =
-document.getElementById("statusToggle");
+document.getElementById(
+"statusToggle"
+);
 
 const donePanel =
-document.getElementById("donePanel");
+document.getElementById(
+"donePanel"
+);
 
 const spendPanel =
-document.getElementById("spendPanel");
+document.getElementById(
+"spendPanel"
+);
 
 const statusPanel =
-document.getElementById("statusPanel");
+document.getElementById(
+"statusPanel"
+);
 
 menuBtn.onclick = ()=>{
 
@@ -171,16 +242,9 @@ statusPanel.classList.toggle(
 
 };
 
-function makeBar(value){
-
-const filled =
-Math.round(value / 20);
-
-return "▓".repeat(filled)
-+
-"░".repeat(5-filled);
-
-}
+/* ========================= */
+/* STATUS */
+/* ========================= */
 
 const batteryRange =
 document.getElementById(
@@ -191,6 +255,29 @@ const brainRange =
 document.getElementById(
 "brainRange"
 );
+
+batteryRange.value =
+localStorage.getItem(
+"sleepyBattery"
+) || 82;
+
+brainRange.value =
+localStorage.getItem(
+"sleepyBrain"
+) || 64;
+
+function makeBar(value){
+
+const filled =
+Math.round(value / 20);
+
+return (
+"▓".repeat(filled)
++
+"░".repeat(5-filled)
+);
+
+}
 
 function updateStatus(){
 
@@ -218,6 +305,8 @@ brainRange.value
 brainRange.value
 }%`;
 
+saveData();
+
 }
 
 batteryRange.oninput =
@@ -228,7 +317,162 @@ updateStatus;
 
 updateStatus();
 
+/* ========================= */
+/* STORAGE */
+/* ========================= */
+
+function saveData(){
+
+localStorage.setItem(
+"sleepyTasks",
+JSON.stringify(tasks)
+);
+
+localStorage.setItem(
+"sleepySpends",
+JSON.stringify(spends)
+);
+
+localStorage.setItem(
+"sleepyBattery",
+batteryRange.value
+);
+
+localStorage.setItem(
+"sleepyBrain",
+brainRange.value
+);
+
+}
+
+function loadData(){
+
+const savedTasks =
+JSON.parse(
+localStorage.getItem(
+"sleepyTasks"
+) || "[]"
+);
+
+const savedSpends =
+JSON.parse(
+localStorage.getItem(
+"sleepySpends"
+) || "[]"
+);
+
+tasks.push(...savedTasks);
+
+spends.push(...savedSpends);
+
+}
+
+loadData();
+
+/* ========================= */
+/* TIME */
+/* ========================= */
+
+function toMinutes(time){
+
+const split =
+time.split(":");
+
+return (
+Number(split[0]) * 60
++
+Number(split[1])
+);
+
+}
+
+/* ========================= */
+/* SUMMARY */
+/* ========================= */
+
+function updateSummary(){
+
+if(tasks.length === 0){
+
+document
+.getElementById(
+"firstCheckin"
+).innerText =
+"--:--";
+
+document
+.getElementById(
+"lastCheckin"
+).innerText =
+"--:--";
+
+document
+.getElementById(
+"activeTimeText"
+).innerText =
+"0H 00M";
+
+return;
+
+}
+
+const first =
+tasks[0].time;
+
+const last =
+tasks[
+tasks.length - 1
+].time;
+
+document
+.getElementById(
+"firstCheckin"
+).innerText =
+first;
+
+document
+.getElementById(
+"lastCheckin"
+).innerText =
+last;
+
+const diff =
+toMinutes(last)
+-
+toMinutes(first);
+
+const h =
+Math.floor(diff / 60);
+
+const m =
+diff % 60;
+
+document
+.getElementById(
+"activeTimeText"
+).innerText =
+`${h}H ${
+String(m)
+.padStart(2,"0")
+}M`;
+
+}
+
+/* ========================= */
+/* RENDER TASKS */
+/* ========================= */
+
 function renderTasks(){
+
+tasks.sort((a,b)=>{
+
+return (
+toMinutes(a.time)
+-
+toMinutes(b.time)
+);
+
+});
 
 const taskList =
 document.getElementById(
@@ -236,16 +480,6 @@ document.getElementById(
 );
 
 taskList.innerHTML = "";
-
-tasks.sort((a,b)=>{
-
-return (
-a.time.localeCompare(
-b.time
-)
-);
-
-});
 
 tasks.forEach(task=>{
 
@@ -269,7 +503,13 @@ ${task.time}
 
 updateSummary();
 
+saveData();
+
 }
+
+/* ========================= */
+/* RENDER SPENDS */
+/* ========================= */
 
 function renderSpends(){
 
@@ -305,8 +545,10 @@ spend.price
 const total =
 spends.reduce((sum,s)=>{
 
-return sum +
-Number(s.price);
+return (
+sum +
+Number(s.price)
+);
 
 },0);
 
@@ -316,93 +558,13 @@ document
 ).innerText =
 `¥${total.toLocaleString()}`;
 
-}
-
-function updateSummary(){
-
-if(tasks.length===0){
-
-document
-.getElementById(
-"firstCheckin"
-).innerText =
-"--:--";
-
-document
-.getElementById(
-"lastCheckin"
-).innerText =
-"--:--";
-
-document
-.getElementById(
-"activeTimeText"
-).innerText =
-"0H 00M";
-
-return;
+saveData();
 
 }
 
-const first =
-tasks[0].time;
-
-const last =
-tasks[
-tasks.length-1
-].time;
-
-document
-.getElementById(
-"firstCheckin"
-).innerText =
-first;
-
-document
-.getElementById(
-"lastCheckin"
-).innerText =
-last;
-
-const firstMinutes =
-toMinutes(first);
-
-const lastMinutes =
-toMinutes(last);
-
-const diff =
-lastMinutes -
-firstMinutes;
-
-const h =
-Math.floor(diff/60);
-
-const m =
-diff%60;
-
-document
-.getElementById(
-"activeTimeText"
-).innerText =
-`${h}H ${
-String(m)
-.padStart(2,"0")
-}M`;
-
-}
-
-function toMinutes(time){
-
-const split =
-time.split(":");
-
-return (
-Number(split[0])*60
-+
-Number(split[1])
-);
-
-}
+/* ========================= */
+/* SAVE DONE */
+/* ========================= */
 
 document
 .getElementById(
@@ -410,14 +572,12 @@ document
 ).onclick = ()=>{
 
 const input =
-document
-.getElementById(
+document.getElementById(
 "doneInput"
 );
 
 const time =
-document
-.getElementById(
+document.getElementById(
 "doneTime"
 );
 
@@ -440,20 +600,56 @@ renderTasks();
 
 };
 
+/* ========================= */
+/* NOW BUTTON */
+/* ========================= */
+
+document
+.getElementById(
+"nowBtn"
+).onclick = ()=>{
+
+const now =
+new Date();
+
+let h =
+now.getHours();
+
+const m =
+String(
+now.getMinutes()
+).padStart(2,"0");
+
+if(h < 6){
+
+h += 24;
+
+}
+
+document
+.getElementById(
+"doneTime"
+).value =
+`${h}:${m}`;
+
+};
+
+/* ========================= */
+/* SAVE SPEND */
+/* ========================= */
+
 document
 .getElementById(
 "saveSpend"
 ).onclick = ()=>{
 
 const input =
-document
-.getElementById(
+document.getElementById(
 "spendInput"
 );
 
 const price =
-document
-.getElementById(
+document.getElementById(
 "spendPrice"
 );
 
@@ -476,37 +672,9 @@ renderSpends();
 
 };
 
-document
-.getElementById(
-"nowBtn"
-).onclick = ()=>{
-
-const now =
-new Date();
-
-let h =
-now.getHours();
-
-const m =
-String(
-now.getMinutes()
-).padStart(2,"0");
-
-if(h<6){
-
-h += 24;
-
-}
-
-document
-.getElementById(
-"doneTime"
-).value =
-`${h}:${m}`;
-
-};
-
-
+/* ========================= */
+/* NEW BUTTON */
+/* ========================= */
 
 let newConfirm = false;
 
@@ -552,11 +720,21 @@ localStorage.setItem(
 session + 1
 );
 
+localStorage.removeItem(
+"sleepyTasks"
+);
+
+localStorage.removeItem(
+"sleepySpends"
+);
+
 tasks.length = 0;
 spends.length = 0;
 
 renderTasks();
 renderSpends();
+
+updateDate();
 
 document
 .getElementById(
@@ -572,7 +750,9 @@ btn.innerText =
 
 };
 
-
+/* ========================= */
+/* SAVE IMAGE */
+/* ========================= */
 
 document
 .getElementById(
@@ -582,8 +762,8 @@ document
 html2canvas(
 document.getElementById(
 "receipt"
-)
-,{
+),
+{
 backgroundColor:"#faf6f5",
 scale:2
 }
@@ -633,45 +813,9 @@ border-radius:12px;
 
 };
 
-function updateDate(){
+/* ========================= */
+/* INITIAL RENDER */
+/* ========================= */
 
-const now =
-new Date();
-
-let year =
-now.getFullYear();
-
-let month =
-String(
-now.getMonth()+1
-).padStart(2,"0");
-
-let day =
-String(
-now.getDate()
-).padStart(2,"0");
-
-let hour =
-now.getHours();
-
-const minute =
-String(
-now.getMinutes()
-).padStart(2,"0");
-
-if(hour < 6){
-
-hour += 24;
-
-}
-
-document
-.getElementById(
-"dateText"
-).innerText =
-`${year}/${month}/${day} ${hour}:${minute}`;
-
-}
-
-updateDate();
-
+renderTasks();
+renderSpends();
